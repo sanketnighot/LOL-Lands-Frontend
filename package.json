@@ -18,7 +18,8 @@
     "lint": "eslint **/*.js --report-unused-disable-directives",
     "lint-fix": "eslint --fix --ext .js,.jsx .",
     "format": "prettier --ignore-path .prettierignore --write .",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "export": "yarn run build && next export"
   },
   "lint-staged": {
     "*js": [

@@ -193,7 +193,7 @@ function Map({ lands, loading }) {
       <AppBar
         position="fixed"
         sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          width: { sm: `calc(100%)` },
           ml: { sm: `${drawerWidth}px` },
           background: "#0a213d",
         }}
@@ -226,7 +226,7 @@ function Map({ lands, loading }) {
           </Button>
         </Toolbar>
       </AppBar>
-      <Box
+      {/* <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
         aria-label="mailbox folders"
@@ -261,7 +261,7 @@ function Map({ lands, loading }) {
         >
           {drawer}
         </Drawer>
-      </Box>
+      </Box> */}
       <Box
         component="main"
         sx={{
