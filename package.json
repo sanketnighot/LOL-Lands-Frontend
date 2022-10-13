@@ -1,0 +1,67 @@
+{
+  "name": "next-mui-boilerplate",
+  "private": true,
+  "description": "A JavaScript Nextjs boilerplate complete with material ui, eslint, airbnb react style guides and husky pre-commit hooks",
+  "keywords": [
+    "nextjs",
+    "mui",
+    "material-ui",
+    "airbnb-style-guides",
+    "husky",
+    "prettier",
+    "eslint"
+  ],
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint **/*.js --report-unused-disable-directives",
+    "lint-fix": "eslint --fix --ext .js,.jsx .",
+    "format": "prettier --ignore-path .prettierignore --write .",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "*js": [
+      "yarn lint --fix",
+      "yarn format"
+    ]
+  },
+  "dependencies": {
+    "@emotion/react": "^11.5.0",
+    "@emotion/styled": "^11.3.0",
+    "@mui/icons-material": "^5.10.2",
+    "@mui/material": "^5.1.0",
+    "@mui/styles": "^5.1.0",
+    "axios": "^0.27.2",
+    "ethers": "^5.7.1",
+    "ioredis": "^5.2.3",
+    "js-sha256": "^0.9.0",
+    "keccak256": "^1.0.6",
+    "konva": "^8.3.2",
+    "merkletreejs": "^0.2.32",
+    "mongodb": "^4.9.0",
+    "next": "12.0.3",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-konva": "^17.0.2-5",
+    "socket.io": "^4.5.1",
+    "socket.io-client": "^4.5.1",
+    "styled-components": "^5.3.3",
+    "wagmi": "^0.6.8",
+    "web3": "^1.7.5"
+  },
+  "devDependencies": {
+    "eslint": "^8.1.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-next": "12.0.2",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "husky": "^7.0.0",
+    "lint-staged": "^11.2.6",
+    "prettier": "^2.4.1"
+  }
+}
