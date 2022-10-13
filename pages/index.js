@@ -20,7 +20,7 @@ export default function Home() {
 
       <main className="main">
         <Typography variant="h1" className="title">
-          <a href="http://localhost:3000/map">Open Maps</a>
+          <a href="https://lolmaps-kqcg4.ondigitalocean.app/map">Open Maps</a>
         </Typography>
       </main>
     </HomeWrapper>
