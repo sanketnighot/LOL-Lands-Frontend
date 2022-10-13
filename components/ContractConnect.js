@@ -45,26 +45,13 @@ const ContractConnect = (props) => {
     }
 
     try {
-      const accounts = await ethereum.request({
-        method: "wallet_addEthereumChain",
-        params: [{
-            chainId: "8001",
-            rpcUrls: ["https://matic-mumbai.chainstacklabs.com"],
-            chainName: "Mumbai",
-            nativeCurrency: {
-                name: "MATIC",
-                symbol: "MATIC",
-                decimals: 18
-            },
-            blockExplorerUrls: ["https://mumbai.polygonscan.com/"]
-        }]
-    });
+      const accounts = await ethereum.request({method: "eth_requestAccounts"});
       setCurrentAccount(accounts[0]);
       console.log("accounts", accounts);
     //   setDispMsg(`Wallet Connected: ${accounts[0]}`);
     } catch (e) {
       console.log(e);
-      setDispMsg("Error, Check console log");
+      setDispMsg("Error, Wallet Not Connected");
     }
   };
 
