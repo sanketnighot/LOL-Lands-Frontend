@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Stage, Layer, Rect } from "react-konva";
 import { Box, Typography } from "@mui/material";
+import axios from "axios";
 
 const scaleBy = 1.1;
 const width = 12;
-
 const MapCanvas = ({
   lands,
   loading,
@@ -15,7 +15,7 @@ const MapCanvas = ({
 }) => {
   const [eid, setId] = useState(0);
   const [stage, setStage] = useState({
-    scale: 1.2,
+    scale: 2,
     x: 700,
     y: 400,
   });
@@ -98,17 +98,17 @@ const MapCanvas = ({
     return (
       <>
         <Rect
-          x={data?.x * width}
-          y={-data?.y * width}
-          width={width * data?.size}
-          height={width * data?.size}
-          fill={getColor(data?.landType, data?.size, data?.status, data?.saleType)}
+          x={(data?.x) * width}
+          y={(-data?.y) * width}
+          width={width * (data?.size)}
+          height={width * (data?.size)}
+          fill={getColor(data?.landType, (data?.size), data?.status, data?.saleType)}
           shadowBlur={eid === data?._id ? 2 : 0}
           stroke={eid === data?._id ? "#81f78e" : "black"}
           zIndex={eid === data?._id ? 5000 : -500}
           strokeWidth={eid === data?._id ? 1 : 0.2}
           onClick={() => {
-            if (data?.saleType === "Presale" && data?.status != "MINTED" && data?.status != "BOOKED" && data?.size != "6" && data?.size != "3" && data?.size != "12") {
+            if (data?.saleType === "Presale" && parseInt(data?.size) != "6" && parseInt(data?.size) != "3" && parseInt(data?.size) != "12") {
               setId(data?._id);
               setCurrData(data);
             }

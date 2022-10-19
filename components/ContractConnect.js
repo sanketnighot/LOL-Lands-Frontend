@@ -100,10 +100,34 @@ const ContractConnect = (props) => {
           console.log(chainId)
           if (chainId === "80001") {
             const contract = new ethers.Contract(contractAddress, abi, signer);
-          
-          let nftTxn = await contract.createLand(currentAccount, infos.x, infos.y, 0);
+          let x,y
+          if (infos.x < 0) {
+            x = -(infos.x - 5000)
+          } else {
+            x = infos.x
+          }
+          if (infos.y < 0) {
+            y = -(infos.y - 5000)
+          } else {
+            y = infos.y
+          }
+          console.log(x, y)
+          let nftTxn = await contract.createLand(currentAccount, x, y, 0).catch((err)=>{
+            if (sendData.x < 0) {
+              sendData.x = -(sendData.x - 5000)
+            }
+            if (sendData.y < 0) {
+              sendData.y = -(sendData.y - 5000)
+            }
+            tileData.status = "FOR_SALE"
+            axios.post(
+              "https://lolmapapi.herokuapp.com/map/updateTile",
+              {x: infos.x, y:infos.y, update: tileData}
+            );
+            console.log(err)
+          })
           console.log(nftTxn);
-          tileData.status = "MINTED"
+          tileData.status = "MINTED" 
            axios.post(
               "https://lolmapapi.herokuapp.com/map/updateTile",
               {x: infos.x, y:infos.y, update: tileData}

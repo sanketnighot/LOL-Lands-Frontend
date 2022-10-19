@@ -70,8 +70,6 @@ function Map({ lands, loading }) {
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-
-  console.log("##### lands, loading-", lands, loading);
   const drawer = (
     <div>
       <Toolbar sx={{ background: "#0a213d" }}>
