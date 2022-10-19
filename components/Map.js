@@ -308,7 +308,7 @@ function Map({ lands, loading }) {
                 xs: "none",
               }}
             >
-              <Image src="/dummy.svg" height={340} width={368} />
+              <Image src="/lol.png" height={370} width={370} /><br/><br/>
               <ContractConnect data={currData} />
               <Box
                 display="flex"
@@ -328,7 +328,9 @@ function Map({ lands, loading }) {
                   <Typography variant="body1" sx={{ color: "white" }}>
                     {currData?.price}
                   </Typography>
+                  
                 </Box>
+                
               </Box>
               <Divider sx={{ borderColor: "#FFFFFF", mb: 2 }} />
               <Box>

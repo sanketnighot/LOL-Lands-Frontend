@@ -19,20 +19,19 @@ const ContractConnect = (props) => {
   const checkWalletIsConnected = async () => {
     const { ethereum } = window;
     if (!ethereum) {
-      //   return setDispMsg("Wallet Not Connected");
-      return;
+      return setDispMsg("Wallet Not Connected");
+      // return;
     }
 
     const accounts = await ethereum.request({ method: "eth_accounts" });
     setCurrentAccount(accounts[0]);
-    console.log(accounts);
 
     if (accounts.length !== 0) {
       const account = accounts[0];
       setCurrentAccount(account);
       //   setDispMsg(`Wallet Connected: ${accounts[0]}`);
     } else {
-      // setDispMsg("Account Not Found");
+      setDispMsg("Account Not Found");
     }
   };
 
@@ -40,14 +39,13 @@ const ContractConnect = (props) => {
 
     const { ethereum } = window;
     if (!ethereum) {
-      //   return setDispMsg("Wallet Not Conntected");
-      return;
+        return setDispMsg("Wallet Not Conntected");
+      // return;
     }
 
     try {
       const accounts = await ethereum.request({method: "eth_requestAccounts"});
       setCurrentAccount(accounts[0]);
-      console.log("accounts", accounts);
     //   setDispMsg(`Wallet Connected: ${accounts[0]}`);
     } catch (e) {
       console.log(e);
@@ -58,31 +56,20 @@ const ContractConnect = (props) => {
   const mintNftHandler = async () => {
     setDispMsg("Minting ...");
     const infos = props.data;
-    // console.log(infos)
     // setDispMsg("Checking Status");
     const tileUpdate = await axios.get(
-      `https://lolmapapi.herokuapp.com/map/getTile?x=${infos.x}&y=${infos.y}`
+      `https://lolmapapi-k9mkf.ondigitalocean.app/map/getTile?x=${infos.x}&y=${infos.y}`
     );
-    console.log(tileUpdate);
     if (tileUpdate.data.status === "MINTED") {
-      console.log("MINTED");
       return setDispMsg("This tile is already MINTED !");
     } else if (tileUpdate.data.status === "BOOKED") {
-      console.log("BOOKED");
       return setDispMsg("This tile is BOOKED by someone else !");
     } else if (tileUpdate.data.status === "NOT_FOR_SALE") {
-      console.log("NOT_FOR_SALE");
       return setDispMsg("This tile is not for SALE !");
     } else if (tileUpdate.data.saleType === "Presale") {
       try {
 
         let tileData = tileUpdate.data
-        tileData.status = "BOOKED"
-         axios.post(
-            "https://lolmapapi.herokuapp.com/map/updateTile",
-            {x: infos.x, y:infos.y, update: tileData}
-          );
-        console.log(tileData)
         let land_type;
         if (infos.landType === "Basic") {
           land_type = 0;
@@ -97,7 +84,6 @@ const ContractConnect = (props) => {
           const provider = new ethers.providers.Web3Provider(ethereum);
           const signer = provider.getSigner();
           const chainId = signer.provider.provider.networkVersion;
-          console.log(chainId)
           if (chainId === "80001") {
             const contract = new ethers.Contract(contractAddress, abi, signer);
           let x,y
@@ -111,17 +97,15 @@ const ContractConnect = (props) => {
           } else {
             y = infos.y
           }
-          console.log(x, y)
-          let nftTxn = await contract.createLand(currentAccount, x, y, 0).catch((err)=>{
-            if (sendData.x < 0) {
-              sendData.x = -(sendData.x - 5000)
-            }
-            if (sendData.y < 0) {
-              sendData.y = -(sendData.y - 5000)
-            }
+          tileData.status = "BOOKED"
+          axios.post(
+              "https://lolmapapi-k9mkf.ondigitalocean.app/map/updateTile",
+              {x: infos.x, y:infos.y, update: tileData}
+            );
+          let nftTxn = await contract.createLand(currentAccount, x, y, land_type).catch((err)=>{
             tileData.status = "FOR_SALE"
             axios.post(
-              "https://lolmapapi.herokuapp.com/map/updateTile",
+              "https://lolmapapi-k9mkf.ondigitalocean.app/map/updateTile",
               {x: infos.x, y:infos.y, update: tileData}
             );
             console.log(err)
@@ -129,26 +113,20 @@ const ContractConnect = (props) => {
           console.log(nftTxn);
           tileData.status = "MINTED" 
            axios.post(
-              "https://lolmapapi.herokuapp.com/map/updateTile",
+              "https://lolmapapi-k9mkf.ondigitalocean.app/map/updateTile",
               {x: infos.x, y:infos.y, update: tileData}
             );
-          console.log(tileData)
-          setDispMsg(
+            setDispMsg(
             <p>Check Txn <a style={{ color:"white"}} href={`https://mumbai.polygonscan.com/tx/${nftTxn.hash}`} target='_blank'>here</a></p>
           );
           } else {
             tileData.status = "FOR_SALE"
             axios.post(
-              "https://lolmapapi.herokuapp.com/map/updateTile",
+              "https://lolmapapi-k9mkf.ondigitalocean.app/map/updateTile",
               {x: infos.x, y:infos.y, update: tileData}
             );
             alert("Incorrect Network \nSwitch to Polygon Mumbai Testnet")
           }
-          
-          // axios.post(
-          //   "https://lolmapapi.herokuapp.com/map/updateTile",
-          //   succData
-          // );
         } else {
           setDispMsg("Ethereum Object Does not Exists");
         }
@@ -157,11 +135,10 @@ const ContractConnect = (props) => {
         let tileData = tileUpdate.data
         tileData.status = "FOR_SALE"
          axios.post(
-            "https://lolmapapi.herokuapp.com/map/updateTile",
+            "https://lolmapapi-k9mkf.ondigitalocean.app/map/updateTile",
             {x: infos.x, y:infos.y, update: tileData}
           );
-        console.log(tileData)
-        console.log(e);
+          console.log(e);
       }
     }
   };

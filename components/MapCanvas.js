@@ -16,8 +16,8 @@ const MapCanvas = ({
   const [eid, setId] = useState(0);
   const [stage, setStage] = useState({
     scale: 2,
-    x: 700,
-    y: 400,
+    x: 450,
+    y: 320,
   });
 
   useEffect(() => {
