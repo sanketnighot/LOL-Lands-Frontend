@@ -4,6 +4,8 @@ import { ethers } from "ethers";
 import axios from "axios";
 import { Button, Typography } from "@mui/material";
 import { abi } from "utils/abi";
+import Box from "@mui/material/Box";
+
 const { MerkleTree } = require("merkletreejs");
 const keccak256 = require("keccak256");
 
@@ -15,6 +17,8 @@ const contractAddress = "0xb13fc678ba17237A28DB894B295914D5Df379116";
 const ContractConnect = (props) => {
   const [currentAccount, setCurrentAccount] = useState(null);
   const [dispMsg, setDispMsg] = useState("");
+  const [status, setStatus] = useState("")
+  const [timer, setTimer] = useState("")
 
   const checkWalletIsConnected = async () => {
     const { ethereum } = window;
@@ -39,14 +43,14 @@ const ContractConnect = (props) => {
 
     const { ethereum } = window;
     if (!ethereum) {
-        return setDispMsg("Wallet Not Conntected");
+        // return setDispMsg("Wallet Not Conntected");
       // return;
     }
 
     try {
       const accounts = await ethereum.request({method: "eth_requestAccounts"});
       setCurrentAccount(accounts[0]);
-      setDispMsg(`Wallet Connected`);
+      // setDispMsg(`Wallet Connected`);
     } catch (e) {
       console.log(e);
       setDispMsg("Error, Wallet Not Connected");
@@ -58,7 +62,7 @@ const ContractConnect = (props) => {
     const { ethereum } = window;
     try {
       setCurrentAccount("");
-      setDispMsg("Wallet Disconnected");
+      // setDispMsg("Wallet Disconnected");
 
     } catch (e) {
       console.log(e);
@@ -211,15 +215,30 @@ const ContractConnect = (props) => {
     );
   };
 
-  useEffect(() => {
-    checkWalletIsConnected();
-  }, []);
+  // useEffect(() => {
+  //   checkWalletIsConnected();
+  // }, []);
+
+
+  useEffect( ()=> {
+		const interval = setInterval(async() => {
+			const getLand = await axios.get(
+        `https://lolmapapi-k9mkf.ondigitalocean.app/map/getTile?x=${props.data.x}&y=${props.data.y}`
+      );
+      setStatus(getLand.data.status)
+      setTimer(getLand.data.updatedAt)
+			}, 1000);
+		return () => clearInterval(interval);
+	},[]);
+
+
   return (
     <div>
       {currentAccount ? mintNftButton() : connectWalletButton()} <br />
       <Typography variant="body1" sx={{ color: "white" }}>
         {dispMsg}
       </Typography>
+     
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -66,6 +66,7 @@ function Map({ lands, loading }) {
   const [landType, setLandType] = useState();
   const [premiumType, setPremiumType] = useState();
   const [size, setSize] = useState();
+  const [timer, setTimer] = useState();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -184,6 +185,28 @@ function Map({ lands, loading }) {
       </Box>
     </div>
   );
+
+//   useEffect( ()=> {
+//     const interval = setInterval(async() => {
+//       if (currData != {}) {
+//         const getLand = await axios.get(
+//           `https://lolmapapi-k9mkf.ondigitalocean.app/map/getTile?x=${currData.x}&y=${currData.y}`
+//         );
+//         if (getLand.status === "BOOKED") {
+//         var final_time = new Date(getLand.updatedAt).getTime() + 120
+//         var now = Date.parse(new Date().toUTCString())
+//         var distance =  final_time - now;
+//         var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+//         var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+//         setTimer(minutes + "m " + seconds + "s ");    
+//         }    
+//       }
+//       console.log(currData)
+      
+//     }, 10000);
+//   return () => clearInterval(interval);
+// },[]);
+
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -310,6 +333,11 @@ function Map({ lands, loading }) {
             >
               <Image src="/lol.png" height={370} width={370} /><br/><br/>
               <ContractConnect data={currData} />
+              <Box display="flex" alignItems="center" justifyContent="space-between" mt={4} mb={2}>
+                <Typography variant="h5" sx={{ color: "white" }}>
+                {(currData.status === `BOOKED`) ? "BOOKED" : (currData.status === "MINTED") ? "SOLD" : "FOR SALE"}<br/>
+                </Typography>
+              </Box>
               <Box
                 display="flex"
                 alignItems="center"
@@ -346,6 +374,14 @@ function Map({ lands, loading }) {
                     sx={{ fontWeight: 700, color: "#6CFF8A" }}
                   >
                     {currData?.x}, {currData?.y}
+                  </Typography>
+                </Box>
+                <Box display="flex" gap={1} alignItems="center">
+                  <Typography
+                    variant="h6"
+                    sx={{ fontWeight: 700, color: "yellow" }}
+                  >
+                    Booked Lands update in 2 minutes
                   </Typography>
                 </Box>
               </Box>
