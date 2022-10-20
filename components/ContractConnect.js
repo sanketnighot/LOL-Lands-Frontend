@@ -31,7 +31,7 @@ const ContractConnect = (props) => {
       setCurrentAccount(account);
       //   setDispMsg(`Wallet Connected: ${accounts[0]}`);
     } else {
-      setDispMsg("Account Not Found");
+      // setDispMsg("Account Not Found");
     }
   };
 
@@ -46,15 +46,28 @@ const ContractConnect = (props) => {
     try {
       const accounts = await ethereum.request({method: "eth_requestAccounts"});
       setCurrentAccount(accounts[0]);
-    //   setDispMsg(`Wallet Connected: ${accounts[0]}`);
+      setDispMsg(`Wallet Connected`);
     } catch (e) {
       console.log(e);
       setDispMsg("Error, Wallet Not Connected");
     }
   };
 
+  const disconnectWalletHandler = async () => {
+
+    const { ethereum } = window;
+    try {
+      setCurrentAccount("");
+      setDispMsg("Wallet Disconnected");
+
+    } catch (e) {
+      console.log(e);
+      setDispMsg("Error, Wallet Not Disconnected");
+    }
+  };
+
   const mintNftHandler = async () => {
-    setDispMsg("Minting ...");
+    
     const infos = props.data;
     // setDispMsg("Checking Status");
     const tileUpdate = await axios.get(
@@ -102,6 +115,7 @@ const ContractConnect = (props) => {
               "https://lolmapapi-k9mkf.ondigitalocean.app/map/updateTile",
               {x: infos.x, y:infos.y, update: tileData}
             );
+          setDispMsg("Minting ...");
           let nftTxn = await contract.createLand(currentAccount, x, y, land_type).catch((err)=>{
             tileData.status = "FOR_SALE"
             axios.post(
@@ -109,6 +123,7 @@ const ContractConnect = (props) => {
               {x: infos.x, y:infos.y, update: tileData}
             );
             console.log(err)
+            alert("Error! Try again \n User Rejected")
           })
           console.log(nftTxn);
           tileData.status = "MINTED" 
@@ -128,7 +143,7 @@ const ContractConnect = (props) => {
             alert("Incorrect Network \nSwitch to Polygon Mumbai Testnet")
           }
         } else {
-          setDispMsg("Ethereum Object Does not Exists");
+          alert("Wallet not connected");
         }
       } catch (e) {
         setDispMsg("Error ! Try Again");
@@ -139,6 +154,7 @@ const ContractConnect = (props) => {
             {x: infos.x, y:infos.y, update: tileData}
           );
           console.log(e);
+          alert("Error! Try Again")
       }
     }
   };
@@ -163,6 +179,7 @@ const ContractConnect = (props) => {
 
   const mintNftButton = () => {
     return (
+      <>
       <Button
         fullWidth
         sx={{
@@ -176,7 +193,21 @@ const ContractConnect = (props) => {
         <Typography variant="button" color="darkblue">
           {(dispMsg === "Minting ...")?"Minting ...":"Mint Land"}
         </Typography>
+      </Button><br/><br/>
+      <Button
+        fullWidth
+        sx={{
+          background: "none",
+          border: "1px solid #fff",
+          borderRadius: "20px",
+        }}
+        onClick={disconnectWalletHandler}
+      >
+        <Typography variant="button" color="white">
+          Disconnect Wallet
+        </Typography>
       </Button>
+      </>
     );
   };
 
