@@ -78,11 +78,11 @@ const ContractConnect = (props) => {
       `https://lolmapapi-k9mkf.ondigitalocean.app/map/getTile?x=${infos.x}&y=${infos.y}`
     );
     if (tileUpdate.data.status === "MINTED") {
-      return setDispMsg("This tile is already MINTED !");
+      return alert("This tile is already MINTED !");
     } else if (tileUpdate.data.status === "BOOKED") {
-      return setDispMsg("This tile is BOOKED by someone else !");
+      return alert("This tile is BOOKED by someone else !");
     } else if (tileUpdate.data.status === "NOT_FOR_SALE") {
-      return setDispMsg("This tile is not for SALE !");
+      return alert("This tile is not for SALE !");
     } else if (tileUpdate.data.saleType === "Presale") {
       try {
 

@@ -334,8 +334,8 @@ function Map({ lands, loading }) {
               <Image src="/lol.png" height={370} width={370} /><br/><br/>
               <ContractConnect data={currData} />
               <Box display="flex" alignItems="center" justifyContent="space-between" mt={4} mb={2}>
-                <Typography variant="h5" sx={{ color: "white" }}>
-                {(currData.status === `BOOKED`) ? "BOOKED" : (currData.status === "MINTED") ? "SOLD" : "FOR SALE"}<br/>
+                <Typography variant="h6" sx={{ color:  (currData.status === `BOOKED`) ? "Yellow" : (currData.status === `MINTED`) ? "#6CFF8A" : "White"}}>
+                {(currData.status === `BOOKED`) ? <><p>BOOKED</p> Booked Lands update within 2 minute</> : (currData.status === "MINTED") ? "SOLD" : "FOR SALE"}<br/>
                 </Typography>
               </Box>
               <Box
@@ -376,14 +376,7 @@ function Map({ lands, loading }) {
                     {currData?.x}, {currData?.y}
                   </Typography>
                 </Box>
-                <Box display="flex" gap={1} alignItems="center">
-                  <Typography
-                    variant="h6"
-                    sx={{ fontWeight: 700, color: "yellow" }}
-                  >
-                    Booked Lands update in 2 minutes
-                  </Typography>
-                </Box>
+                
               </Box>
             </Box>
             <Box
