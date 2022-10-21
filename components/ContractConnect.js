@@ -11,7 +11,7 @@ const keccak256 = require("keccak256");
 // var sha256 = require("js-sha256").sha256;
 // const salt = "1234";
 
-const contractAddress = "0xaF4d9Ac3E439e1C94280231DD0Fc103f41555FF9";
+const contractAddress = "0x8444847C80FE297ea7a8D3962d304d8D410e443D";
 
 const ContractConnect = (props) => {
   const [currentAccount, setCurrentAccount] = useState(null);
