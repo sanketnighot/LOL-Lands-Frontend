@@ -179,6 +179,7 @@ const ContractConnect = (props) => {
           alert("Error! Try Again")
       }
     }
+    setDispMsg("");
   };
 
   const connectWalletButton = () => {
