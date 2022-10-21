@@ -335,7 +335,7 @@ function Map({ lands, loading }) {
               <ContractConnect data={currData} />
               <Box display="flex" alignItems="center" justifyContent="space-between" mt={4} mb={2}>
                 <Typography variant="h6" sx={{ color:  (currData.status === `BOOKED`) ? "Yellow" : (currData.status === `MINTED`) ? "#6CFF8A" : "White"}}>
-                {(currData.status === `BOOKED`) ? <><p>BOOKED</p> Booked Lands update within 2 minute</> : (currData.status === "MINTED") ? "SOLD" : "FOR SALE"}<br/>
+                {(currData.status === `BOOKED`) ? <><p>BOOKED</p> Booked Lands update within 5 minute</> : (currData.status === "MINTED") ? "SOLD" : "FOR SALE"}<br/>
                 </Typography>
               </Box>
               <Box

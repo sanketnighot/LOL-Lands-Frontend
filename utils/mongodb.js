@@ -1,7 +1,7 @@
 import { MongoClient } from "mongodb";
 
-let uri = "mongodb+srv://propert-test:propert12345@cluster0.uvnik.mongodb.net/propert-test?retryWrites=true&w=majority";
-let dbName = "propert-test";
+let uri = "mongodb+srv://lol:lordslands123456@lol-maps.n4xq0ul.mongodb.net/?retryWrites=true&w=majority";
+let dbName = "test";
 
 export const connectToDatabase = async () => {
   return await MongoClient.connect(uri, {

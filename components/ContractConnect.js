@@ -4,7 +4,6 @@ import { ethers } from "ethers";
 import axios from "axios";
 import { Button, Typography } from "@mui/material";
 import { abi } from "utils/abi";
-import Box from "@mui/material/Box";
 
 const { MerkleTree } = require("merkletreejs");
 const keccak256 = require("keccak256");
@@ -12,7 +11,7 @@ const keccak256 = require("keccak256");
 // var sha256 = require("js-sha256").sha256;
 // const salt = "1234";
 
-const contractAddress = "0xb13fc678ba17237A28DB894B295914D5Df379116";
+const contractAddress = "0xa761F66F828A0a542De83C514998Ed51CF7DbBE0";
 
 const ContractConnect = (props) => {
   const [currentAccount, setCurrentAccount] = useState(null);
@@ -75,7 +74,7 @@ const ContractConnect = (props) => {
     const infos = props.data;
     // setDispMsg("Checking Status");
     const tileUpdate = await axios.get(
-      `https://lolmapapi-k9mkf.ondigitalocean.app/map/getTile?x=${infos.x}&y=${infos.y}`
+      `https://lolmapapi-5o64b.ondigitalocean.app/map/getTile?x=${infos.x}&y=${infos.y}`
     );
     if (tileUpdate.data.status === "MINTED") {
       return alert("This tile is already MINTED !");
@@ -114,34 +113,51 @@ const ContractConnect = (props) => {
           } else {
             y = infos.y
           }
-          tileData.status = "BOOKED"
-          axios.post(
-              "https://lolmapapi-k9mkf.ondigitalocean.app/map/updateTile",
-              {x: infos.x, y:infos.y, update: tileData}
-            );
+          const proofData= {
+            x:x,
+            y:y,
+            price:infos.price*(10**18),
+            category:land_type,
+            url:`ipfs://QmVg3BqbPGMDXLGKhgPZK3hdLzVeHJxksRiXmmzTGuV6hF/${infos.name}.json`
+          } 
+          let proof = await axios.post('https://merkleproof-cbc6g.ondigitalocean.app/api/getMerkleProof', proofData)
+          console.log("Proof: ", proof.data)
+          const price = Web3.utils.toWei((infos.price).toString(), 'ether')
           setDispMsg("Minting ...");
-          let nftTxn = await contract.createLand(currentAccount, x, y, land_type).catch((err)=>{
-            tileData.status = "FOR_SALE"
-            axios.post(
-              "https://lolmapapi-k9mkf.ondigitalocean.app/map/updateTile",
-              {x: infos.x, y:infos.y, update: tileData}
-            );
+          let nftTxn = await contract.buyLand(currentAccount, proof.data, x, y, land_type, proofData.url,{value: price}).catch((err)=>{
             console.log(err)
             alert("Error! Try again \n User Rejected")
           })
-          console.log(nftTxn);
-          tileData.status = "MINTED" 
-           axios.post(
-              "https://lolmapapi-k9mkf.ondigitalocean.app/map/updateTile",
-              {x: infos.x, y:infos.y, update: tileData}
-            );
+          tileData.status = "BOOKED"
+          await axios.post(
+                "https://lolmapapi-5o64b.ondigitalocean.app/map/updateTile",
+                {x: infos.x, y:infos.y, update: tileData}
+              );
+          await nftTxn.wait(1).then(()=>{
+                console.log(nftTxn);
+                tileData.status = "MINTED" 
+                axios.post(
+                    "https://lolmapapi-5o64b.ondigitalocean.app/map/updateTile",
+                    {x: infos.x, y:infos.y, update: tileData}
+                  );
+              }).catch((err) => {
+                tileData.status = "FOR_SALE"
+                axios.post(
+                  "https://lolmapapi-5o64b.ondigitalocean.app/map/updateTile",
+                  {x: infos.x, y:infos.y, update: tileData}
+                );
+                console.log(err)
+                alert("Error! Try again \n Transaction Failed")
+              })
+          
+          
             setDispMsg(
             <p>Check Txn <a style={{ color:"white"}} href={`https://mumbai.polygonscan.com/tx/${nftTxn.hash}`} target='_blank'>here</a></p>
           );
           } else {
             tileData.status = "FOR_SALE"
             axios.post(
-              "https://lolmapapi-k9mkf.ondigitalocean.app/map/updateTile",
+              "https://lolmapapi-5o64b.ondigitalocean.app/map/updateTile",
               {x: infos.x, y:infos.y, update: tileData}
             );
             alert("Incorrect Network \nSwitch to Polygon Mumbai Testnet")
@@ -154,7 +170,7 @@ const ContractConnect = (props) => {
         let tileData = tileUpdate.data
         tileData.status = "FOR_SALE"
          axios.post(
-            "https://lolmapapi-k9mkf.ondigitalocean.app/map/updateTile",
+            "https://lolmapapi-5o64b.ondigitalocean.app/map/updateTile",
             {x: infos.x, y:infos.y, update: tileData}
           );
           console.log(e);
@@ -218,19 +234,6 @@ const ContractConnect = (props) => {
   // useEffect(() => {
   //   checkWalletIsConnected();
   // }, []);
-
-
-  useEffect( ()=> {
-		const interval = setInterval(async() => {
-			const getLand = await axios.get(
-        `https://lolmapapi-k9mkf.ondigitalocean.app/map/getTile?x=${props.data.x}&y=${props.data.y}`
-      );
-      setStatus(getLand.data.status)
-      setTimer(getLand.data.updatedAt)
-			}, 1000);
-		return () => clearInterval(interval);
-	},[]);
-
 
   return (
     <div>
