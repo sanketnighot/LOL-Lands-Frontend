@@ -11,7 +11,7 @@ const keccak256 = require("keccak256");
 // var sha256 = require("js-sha256").sha256;
 // const salt = "1234";
 
-const contractAddress = "0x8444847C80FE297ea7a8D3962d304d8D410e443D";
+const contractAddress = "0xdDFB7620D78304125b0C3F77d8a3ad1c1f6c9984";
 
 const ContractConnect = (props) => {
   const [currentAccount, setCurrentAccount] = useState(null);
@@ -100,7 +100,7 @@ const ContractConnect = (props) => {
           const provider = new ethers.providers.Web3Provider(ethereum);
           const signer = provider.getSigner();
           const chainId = signer.provider.provider.networkVersion;
-          if (chainId === "80001") {
+          if (chainId === "1") {
             const contract = new ethers.Contract(contractAddress, abi, signer);
           let x,y
           if (infos.x < 0) {
