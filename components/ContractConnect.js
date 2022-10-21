@@ -126,6 +126,13 @@ const ContractConnect = (props) => {
           setDispMsg("Minting ...");
           let nftTxn = await contract.buyLand(currentAccount, proof.data, x, y, land_type, proofData.url,{value: price}).catch((err)=>{
             console.log(err)
+            if (err.data.code === -32000) {
+                alert("Insufficient Funds")
+            } else {
+              alert(err.message)
+            }
+
+            
           })
           setDispMsg(
             <p>Check Transaction <a style={{ color:"white"}} href={`https://mumbai.polygonscan.com/tx/${nftTxn.hash}`} target='_blank'>here</a></p>
@@ -152,7 +159,6 @@ const ContractConnect = (props) => {
                   {x: infos.x, y:infos.y, update: tileData}
                 );
                 console.log(err)
-                alert("Error! Try again \n Transaction Failed")
               })
               
           
@@ -176,7 +182,6 @@ const ContractConnect = (props) => {
             {x: infos.x, y:infos.y, update: tileData}
           );
           console.log(e);
-          alert("Error! Try Again")
       }
     }
     setDispMsg("");
