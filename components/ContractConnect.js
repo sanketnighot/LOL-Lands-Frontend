@@ -11,7 +11,7 @@ const keccak256 = require("keccak256");
 // var sha256 = require("js-sha256").sha256;
 // const salt = "1234";
 
-const contractAddress = "0xa761F66F828A0a542De83C514998Ed51CF7DbBE0";
+const contractAddress = "0xaF4d9Ac3E439e1C94280231DD0Fc103f41555FF9";
 
 const ContractConnect = (props) => {
   const [currentAccount, setCurrentAccount] = useState(null);
@@ -22,7 +22,7 @@ const ContractConnect = (props) => {
   const checkWalletIsConnected = async () => {
     const { ethereum } = window;
     if (!ethereum) {
-      return setDispMsg("Wallet Not Connected");
+      return alert("Wallet Not Connected");
       // return;
     }
 
@@ -52,7 +52,7 @@ const ContractConnect = (props) => {
       // setDispMsg(`Wallet Connected`);
     } catch (e) {
       console.log(e);
-      setDispMsg("Error, Wallet Not Connected");
+      alert("Error, Wallet Not Connected");
     }
   };
 
@@ -65,7 +65,7 @@ const ContractConnect = (props) => {
 
     } catch (e) {
       console.log(e);
-      setDispMsg("Error, Wallet Not Disconnected");
+      alert("Error, Wallet Not Disconnected");
     }
   };
 
@@ -142,7 +142,7 @@ const ContractConnect = (props) => {
                     "https://lolmapapi-5o64b.ondigitalocean.app/map/updateTile",
                     {x: infos.x, y:infos.y, update: tileData}
                   );
-                  setDispMsg(
+                  alert(
                     <p>Land Minted ... Check Transaction <a style={{ color:"white"}} href={`https://mumbai.polygonscan.com/tx/${nftTxn.hash}`} target='_blank'>here</a></p>
                   );
               }).catch((err) => {
@@ -163,7 +163,7 @@ const ContractConnect = (props) => {
               "https://lolmapapi-5o64b.ondigitalocean.app/map/updateTile",
               {x: infos.x, y:infos.y, update: tileData}
             );
-            alert("Incorrect Network \nSwitch to Polygon Mumbai Testnet")
+            alert("Incorrect Network \nSwitch to Ethereum Mainnet")
           }
         } else {
           alert("Wallet not connected");
@@ -213,7 +213,7 @@ const ContractConnect = (props) => {
         onClick={mintNftHandler}
       >
         <Typography variant="button" color="darkblue">
-          {(dispMsg === "Minting ...")?"Minting ...":"Mint Land"}
+          Mint Land
         </Typography>
       </Button><br/><br/>
       <Button

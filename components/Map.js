@@ -220,7 +220,7 @@ function Map({ lands, loading }) {
         }}
       >
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Box sx={{ display: "flex", alignItems: "center" }}>
+          {/* <Box sx={{ display: "flex", alignItems: "center" }}>
             <IconButton
               color="inherit"
               aria-label="open drawer"
@@ -233,13 +233,13 @@ function Map({ lands, loading }) {
             <Typography variant="h6" noWrap component="div">
               Lords of the Lands | Map
             </Typography>
-          </Box>
+          </Box> */}
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Typography variant="h6" noWrap component="div" sx={{ color: "white" }}>
+            <Typography variant="h7" noWrap component="div" sx={{ color: "white" }}>
               PLEASE DO NOT REFRESH THE PAGE
             </Typography>
           </Box>
-          <Button
+          {/* <Button
             sx={{
               border: "1px solid #fff",
               borderRadius: "20px",
@@ -249,7 +249,7 @@ function Map({ lands, loading }) {
             <Typography variant="body2" sx={{ color: "white" }}>
               View in Opensea
             </Typography>
-          </Button>
+          </Button> */}
         </Toolbar>
       </AppBar>
       {/* <Box
@@ -340,7 +340,7 @@ function Map({ lands, loading }) {
               <ContractConnect data={currData} />
               <Box display="flex" alignItems="center" justifyContent="space-between" mt={4} mb={2}>
                 <Typography variant="h6" sx={{ color:  (currData.status === `BOOKED`) ? "Yellow" : (currData.status === `MINTED`) ? "#6CFF8A" : "White"}}>
-                {(currData.status === `BOOKED`) ? <><p>BOOKED</p> Booked Lands update within 5 minute</> : (currData.status === "MINTED") ? "SOLD" : "FOR SALE"}<br/>
+                {(currData.status === `BOOKED`) ? <><p>BOOKED</p> This land is booked and will be unbooked if the transaction doesnt go through in 5 mins.</> : (currData.status === "MINTED") ? "SOLD" : "FOR SALE"}<br/>
                 </Typography>
               </Box>
               <Box
@@ -403,6 +403,11 @@ function Map({ lands, loading }) {
               }}
             >
               <ContractConnect data={currData} />
+              <Box display="flex" alignItems="center" justifyContent="space-between" mt={4} mb={2}>
+                <Typography variant="h6" sx={{ color:  (currData.status === `BOOKED`) ? "Yellow" : (currData.status === `MINTED`) ? "#6CFF8A" : "White"}}>
+                {(currData.status === `BOOKED`) ? <><p>BOOKED</p> This land is booked and will be unbooked if the transaction doesnt go through in 5 mins.</> : (currData.status === "MINTED") ? "SOLD" : "FOR SALE"}<br/>
+                </Typography>
+              </Box>
               <Box
                 display="flex"
                 alignItems="center"
