@@ -129,7 +129,7 @@ const ContractConnect = (props) => {
             if (err.data.code === -32000) {
                 alert("Insufficient Funds")
             } else {
-              alert(err.message)
+              alert("Error")
             }
 
             
@@ -148,9 +148,6 @@ const ContractConnect = (props) => {
                 axios.post(
                     "https://lolmapapi-5o64b.ondigitalocean.app/map/updateTile",
                     {x: infos.x, y:infos.y, update: tileData}
-                  );
-                  alert(
-                    <p>Land Minted ... Check Transaction <a style={{ color:"white"}} href={`https://mumbai.polygonscan.com/tx/${nftTxn.hash}`} target='_blank'>here</a></p>
                   );
               }).catch((err) => {
                 tileData.status = "FOR_SALE"
