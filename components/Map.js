@@ -231,7 +231,12 @@ function Map({ lands, loading }) {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" noWrap component="div">
-              Map
+              Lords of the Lands | Map
+            </Typography>
+          </Box>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Typography variant="h6" noWrap component="div" sx={{ color: "white" }}>
+              PLEASE DO NOT REFRESH THE PAGE
             </Typography>
           </Box>
           <Button

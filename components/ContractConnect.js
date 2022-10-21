@@ -126,8 +126,10 @@ const ContractConnect = (props) => {
           setDispMsg("Minting ...");
           let nftTxn = await contract.buyLand(currentAccount, proof.data, x, y, land_type, proofData.url,{value: price}).catch((err)=>{
             console.log(err)
-            alert("Error! Try again \n User Rejected")
           })
+          setDispMsg(
+            <p>Check Transaction <a style={{ color:"white"}} href={`https://mumbai.polygonscan.com/tx/${nftTxn.hash}`} target='_blank'>here</a></p>
+          );
           tileData.status = "BOOKED"
           await axios.post(
                 "https://lolmapapi-5o64b.ondigitalocean.app/map/updateTile",
@@ -140,6 +142,9 @@ const ContractConnect = (props) => {
                     "https://lolmapapi-5o64b.ondigitalocean.app/map/updateTile",
                     {x: infos.x, y:infos.y, update: tileData}
                   );
+                  setDispMsg(
+                    <p>Land Minted ... Check Transaction <a style={{ color:"white"}} href={`https://mumbai.polygonscan.com/tx/${nftTxn.hash}`} target='_blank'>here</a></p>
+                  );
               }).catch((err) => {
                 tileData.status = "FOR_SALE"
                 axios.post(
@@ -149,11 +154,9 @@ const ContractConnect = (props) => {
                 console.log(err)
                 alert("Error! Try again \n Transaction Failed")
               })
+              
           
-          
-            setDispMsg(
-            <p>Check Txn <a style={{ color:"white"}} href={`https://mumbai.polygonscan.com/tx/${nftTxn.hash}`} target='_blank'>here</a></p>
-          );
+            
           } else {
             tileData.status = "FOR_SALE"
             axios.post(
@@ -166,7 +169,6 @@ const ContractConnect = (props) => {
           alert("Wallet not connected");
         }
       } catch (e) {
-        setDispMsg("Error ! Try Again");
         let tileData = tileUpdate.data
         tileData.status = "FOR_SALE"
          axios.post(
