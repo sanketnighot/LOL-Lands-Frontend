@@ -135,7 +135,7 @@ const ContractConnect = (props) => {
             
           })
           setDispMsg(
-            <p>Check Transaction <a style={{ color:"white"}} href={`https://mumbai.polygonscan.com/tx/${nftTxn.hash}`} target='_blank'>here</a></p>
+            <p>Check Transaction <a style={{ color:"white"}} href={`https://etherscan.io/tx/${nftTxn.hash}`} target='_blank'>here</a></p>
           );
           tileData.status = "BOOKED"
           await axios.post(
