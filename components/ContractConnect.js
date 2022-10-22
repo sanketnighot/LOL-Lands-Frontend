@@ -125,14 +125,12 @@ const ContractConnect = (props) => {
           const price = Web3.utils.toWei((infos.price).toString(), 'ether')
           setDispMsg("Minting ...");
           let nftTxn = await contract.buyLand(currentAccount, proof.data, x, y, land_type, proofData.url,{value: price}).catch((err)=>{
-            console.log(err)
-            if (err.data.code === -32000) {
+            console.log(err.error)
+            if (err.error.code === -32000) {
                 alert("Insufficient Funds")
             } else {
               alert("Error")
             }
-
-            
           })
           setDispMsg(
             <p>Check Transaction <a style={{ color:"white"}} href={`https://etherscan.io/tx/${nftTxn.hash}`} target='_blank'>here</a></p>
