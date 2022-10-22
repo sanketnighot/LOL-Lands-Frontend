@@ -1,46 +1,31 @@
 import Head from "next/head";
 import dynamic from "next/dynamic";
 import axios from "axios";
-// import io from "socket.io-client";
+import io from "socket.io-client";
 import { useState, useEffect, useRef } from "react";
 
 const MapComponent = dynamic(() => import("../components/Map"), {
   ssr: false,
-}); 
+});
 
 const Map = ({ data }) => {
   const [lands, setLands] = useState(data);
   const [loading, setLoading] = useState(false);
 
-  // const socketRef = useRef(null);
+  const socketRef = useRef(null);
 
-  // const socketInitializer = async () => {
-  //   setLoading(true)
-  //   await axios.get("/api/socket");
-  //   socketRef?.current = io();
+  const socketInitializer = async () => {
+    setLoading(true)
+    await axios.get("/api/socket");
+    socketRef?.current = io();
 
-  //   socketRef?.current.on("changed", (d) => {
-  //     setLands((prev) => prev.map((x) => (x._id === d._id ? d : x)));
-  //   });
-  //   setLoading(false);
-  // };
+    socketRef?.current.on("changed", (d) => {
+      setLands((prev) => prev.map((x) => (x._id === d._id ? d : x)));
+    });
+    setLoading(false);
+  };
 
-  // useEffect(() => socketInitializer(), []);
-
-  // ===
-  const fetchMap = async () => {
-		const response = await axios.get("https://lolmapapi-5o64b.ondigitalocean.app/map/getMap").catch((err) => {
-			console.log(err);
-		});
-		setLands(response.data);
-	}
-	useEffect( ()=> {
-		const interval = setInterval(() => {
-			fetchMap();
-			}, 1000);
-		return () => clearInterval(interval);
-	},[]);
-  // ===
+  useEffect(() => socketInitializer(), []);
 
   return (
     <div>
