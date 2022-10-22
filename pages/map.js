@@ -6,7 +6,7 @@ import { useState, useEffect, useRef } from "react";
 
 const MapComponent = dynamic(() => import("../components/Map"), {
   ssr: false,
-});
+}); 
 
 const Map = ({ data }) => {
   const [lands, setLands] = useState(data);
