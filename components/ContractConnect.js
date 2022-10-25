@@ -97,6 +97,7 @@ const ContractConnect = (props) => {
         
         const { ethereum } = window;
         if (ethereum) {
+          setDispMsg("Minting ...");
           const provider = new ethers.providers.Web3Provider(ethereum);
           const signer = provider.getSigner();
           const chainId = signer.provider.provider.networkVersion;
@@ -123,7 +124,7 @@ const ContractConnect = (props) => {
           let proof = await axios.post('https://merkleproof-cbc6g.ondigitalocean.app/api/getMerkleProof', proofData)
           console.log("Proof: ", proof.data)
           const price = Web3.utils.toWei((infos.price).toString(), 'ether')
-          setDispMsg("Minting ...");
+          
           let nftTxn = await contract.buyLand(currentAccount, proof.data, x, y, land_type, proofData.url,{value: price}).catch((err)=>{
             console.log(err.error)
             if (err.error.code === -32000) {

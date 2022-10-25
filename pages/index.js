@@ -19,17 +19,26 @@ export default function Home({ data }) {
   const [loading, setLoading] = useState(false);
 
   const fetchMap = async () => {
-		const response = await axios.get("https://lolmapapi-5o64b.ondigitalocean.app/map/getMap").catch((err) => {
-			console.log(err);
-		});
-    console.log(response.data)
-    setLands(response.data);
+    try {
+        const response = await axios.get("https://lolmapapi-5o64b.ondigitalocean.app/map/getMap").catch((err) => {
+        console.log(err);
+          });
+          setLands(response.data);
+    } catch (err) {
+        console.log(err)
+    }
+		
 	}
 	useEffect( ()=> {
 		const interval = setInterval(() => {
-			fetchMap();
-			}, 15000);
-		return () => clearInterval(interval);
+      try {
+        fetchMap();
+      } catch(err) {
+        console.log(err);
+      }
+			
+			}, 30000);
+		return () => clearInterval(interval)
 	},[]);
 
   fetchMap();

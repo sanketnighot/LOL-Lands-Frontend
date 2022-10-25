@@ -262,7 +262,7 @@ function Map({ lands, loading }) {
           </Box> */}
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <Typography variant="h10" noWrap component="div" sx={{ color: "white" }}>
-              PLEASE DO NOT REFRESH THE PAGE AFTER CONFIRMING TRANSACTION ON METAMASK
+              KINDLY WAIT FOR THE MAP TO LOAD
             </Typography>
           </Box>
           <Box sx={{ display: "flex", alignItems: "center" }}>
