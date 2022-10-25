@@ -23,25 +23,22 @@ export default function Home({ data }) {
         const response = await axios.get("https://lolmapapi-5o64b.ondigitalocean.app/map/getMap").catch((err) => {
         console.log(err);
           });
+          console.log("called")
           setLands(response.data);
     } catch (err) {
         console.log(err)
     }
 		
 	}
-	useEffect( ()=> {
-		const interval = setInterval(() => {
-      try {
-        fetchMap();
-      } catch(err) {
-        console.log(err);
-      }
-			
-			}, 30000);
-		return () => clearInterval(interval)
-	},[]);
+  useEffect(() => {
+    fetchMap();
+    const interval = setInterval(() => {
+      fetchMap();
+    }, 15000);
+    return () => clearInterval(interval);
+  }, []);
 
-  fetchMap();
+  // fetchMap();
   return (
       <div>
       <Head>
