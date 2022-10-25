@@ -19,7 +19,7 @@ const handler = async (req, res) => {
   console.log(id, data);
 
   const db = await connectToDatabase();
-  const collectionObj = db.collection("maps");
+  const collectionObj = await db.collection("maps");
   await collectionObj.updateOne({ _id: id }, { $set: data });
   return res.json(true);
 };
