@@ -32,7 +32,7 @@ export default function Home({ data }) {
 		return () => clearInterval(interval);
 	},[]);
 
-
+  fetchMap();
   return (
       <div>
       <Head>

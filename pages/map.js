@@ -24,7 +24,7 @@ const Map = ({ data }) => {
 			}, 15000);
 		return () => clearInterval(interval);
 	},[]);
-
+  fetchMap();
   return (
     <div>
       <Head>
