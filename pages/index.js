@@ -18,20 +18,21 @@ export default function Home({ data }) {
   const [lands, setLands] = useState(data);
   const [loading, setLoading] = useState(false);
 
-  const socketRef = useRef(null);
+  const fetchMap = async () => {
+		const response = await axios.get("https://lolmapapi-5o64b.ondigitalocean.app/map/getMap").catch((err) => {
+			console.log(err);
+		});
+    console.log(response.data)
+    setLands(response.data);
+	}
+	useEffect( ()=> {
+		const interval = setInterval(() => {
+			fetchMap();
+			}, 15000);
+		return () => clearInterval(interval);
+	},[]);
 
-  const socketInitializer = async () => {
-    setLoading(true)
-    await axios.get("/api/socket");
-    socketRef?.current = io();
 
-    socketRef?.current.on("changed", (d) => {
-      setLands((prev) => prev.map((x) => (x._id === d._id ? d : x)));
-    });
-    setLoading(false);
-  };
-
-  useEffect(() => socketInitializer(), []);
   return (
       <div>
       <Head>
@@ -43,9 +44,3 @@ export default function Home({ data }) {
     </div>
   );
 }
-
-export const getServerSideProps = async (ctx) => {
-  const protocol = process.env.NODE_ENV === "development" ? "http" : "http";
-  const url = `${protocol}://${ctx.req.headers.host}/api/land`;
-  return { props: { data: (await axios.get(url)).data } };
-};
