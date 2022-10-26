@@ -5,6 +5,8 @@ import axios from "axios";
 import { Button, Typography } from "@mui/material";
 import { abi } from "utils/abi";
 
+import {  useAccount, useContract, useSigner, useNetwork, useConnect, useDisconnect, useSwitchNetwork } from 'wagmi'
+
 const { MerkleTree } = require("merkletreejs");
 const keccak256 = require("keccak256");
 
@@ -16,8 +18,25 @@ const contractAddress = "0xdDFB7620D78304125b0C3F77d8a3ad1c1f6c9984";
 const ContractConnect = (props) => {
   const [currentAccount, setCurrentAccount] = useState(null);
   const [dispMsg, setDispMsg] = useState("");
-  const [status, setStatus] = useState("")
-  const [timer, setTimer] = useState("")
+  const { address, isConnected } = useAccount();
+  const { data: signer } = useSigner();
+  const { connect, connectors, error, isLoading, pendingConnector } = useConnect()
+  const { chain } = useNetwork();
+  const { chains, switchNetwork } = useSwitchNetwork();
+  const { disconnect } = useDisconnect();
+
+  const contract = useContract({
+    addressOrName: contractAddress,
+    contractInterface: abi,
+    signerOrProvider: signer,
+  });
+
+  useEffect(() => {
+    if (!isConnected) return;
+    if (chains.find((x) => x.id === chain?.id) > 0) return;
+
+    switchNetwork && switchNetwork(1);
+  }, [chain?.id, chains, isConnected, switchNetwork]);
 
   const checkWalletIsConnected = async () => {
     const { ethereum } = window;
@@ -77,11 +96,11 @@ const ContractConnect = (props) => {
       `https://lolmapapi-5o64b.ondigitalocean.app/map/getTile?x=${infos.x}&y=${infos.y}`
     );
     if (tileUpdate.data.status === "MINTED") {
-      return alert("This tile is already MINTED !");
+      return alert("This Land is already MINTED !");
     } else if (tileUpdate.data.status === "BOOKED") {
-      return alert("This tile is BOOKED by someone else !");
+      return alert("This Land is BOOKED by someone else !");
     } else if (tileUpdate.data.status === "NOT_FOR_SALE") {
-      return alert("This tile is not for SALE !");
+      return alert("This Land is not for SALE !");
     } else if (tileUpdate.data.saleType === "Presale") {
       try {
 
@@ -95,14 +114,14 @@ const ContractConnect = (props) => {
           land_type = 2;
         }
         
-        const { ethereum } = window;
-        if (ethereum) {
+        // const { ethereum } = window;
+        // if (ethereum) {
           setDispMsg("Minting ...");
           const provider = new ethers.providers.Web3Provider(ethereum);
           const signer = provider.getSigner();
-          const chainId = signer.provider.provider.networkVersion;
-          if (chainId === "1") {
-            const contract = new ethers.Contract(contractAddress, abi, signer);
+          // const chainId = signer.provider.provider.networkVersion;
+          if (chain?.id === 1) {
+            // const contract = new ethers.Contract(contractAddress, abi, signer);
           let x,y
           if (infos.x < 0) {
             x = -(infos.x - 5000)
@@ -122,15 +141,22 @@ const ContractConnect = (props) => {
             url:`ipfs://QmVg3BqbPGMDXLGKhgPZK3hdLzVeHJxksRiXmmzTGuV6hF/${infos.name}.json`
           } 
           let proof = await axios.post('https://merkleproof-cbc6g.ondigitalocean.app/api/getMerkleProof', proofData)
-          console.log("Proof: ", proof.data)
+          // console.log("Proof: ", proof.data)
           const price = Web3.utils.toWei((infos.price).toString(), 'ether')
-          
-          let nftTxn = await contract.buyLand(currentAccount, proof.data, x, y, land_type, proofData.url,{value: price}).catch((err)=>{
-            console.log(err.error)
-            if (err.error.code === -32000) {
-                alert("Insufficient Funds")
+          console.log("Connected Wallet: ", address)
+          let nftTxn = await contract.buyLand(address, proof.data, x, y, land_type, proofData.url,{value: price}).catch((err)=>{
+            console.log(err)
+            if (chain?.id !== 1) {
+              alert("Switch to Mainnet Network");
+            } else if (err?.code == 4001) {
+              alert("User rejected the transaction");
+            } else if (err?.error?.code == -32000) {
+              alert("Insufficient funds to complete the transaction");
+            } else if (err?.code == 429) {
+              alert(err.message);
             } else {
-              alert("Error")
+              console.log(err)
+              alert("An error occured. Please Try again");
             }
           })
           setDispMsg(
@@ -167,9 +193,9 @@ const ContractConnect = (props) => {
             );
             alert("Incorrect Network \nSwitch to Ethereum Mainnet")
           }
-        } else {
-          alert("Wallet not connected");
-        }
+        // } else {
+        //   alert("Wallet not connected");
+        // }
       } catch (e) {
         let tileData = tileUpdate.data
         tileData.status = "FOR_SALE"
@@ -185,19 +211,31 @@ const ContractConnect = (props) => {
 
   const connectWalletButton = () => {
     return (
+      <>
+      {connectors.map((connector) => (
       <Button
         fullWidth
         sx={{
           background: "linear-gradient(92deg, #72FF79 2.65%, #4AFFDE 81.91%)",
           border: "1px solid #fff",
           borderRadius: "20px",
+          marginBottom: "10px"
         }}
-        onClick={connectWalletHandler}
+        disabled={!connector.ready}
+        key={connector.id}
+        onClick={() => connect({ connector })}
       >
         <Typography variant="button" color="darkblue">
-          Connect Wallet
+        {connector.name}
+          {!connector.ready && ' (unsupported)'}
+          {isLoading &&
+            connector.id === pendingConnector?.id &&
+            ' (connecting)'}
         </Typography>
       </Button>
+      
+      ))}
+      </>
     );
   };
 
@@ -225,7 +263,7 @@ const ContractConnect = (props) => {
           border: "1px solid #fff",
           borderRadius: "20px",
         }}
-        onClick={disconnectWalletHandler}
+        onClick={disconnect}
       >
         <Typography variant="button" color="white">
           Disconnect Wallet
@@ -241,7 +279,7 @@ const ContractConnect = (props) => {
 
   return (
     <div>
-      {currentAccount ? mintNftButton() : connectWalletButton()} <br />
+      {isConnected ? mintNftButton() : connectWalletButton()} <br />
       <Typography variant="body1" sx={{ color: "white" }}>
         {dispMsg}
       </Typography>
