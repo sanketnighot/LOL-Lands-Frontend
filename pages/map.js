@@ -47,11 +47,4 @@ const Map = ({ data }) => {
     </div>
   );
 };
-
-export const getServerSideProps = async (ctx) => {
-  const protocol = process.env.NODE_ENV === "development" ? "http" : "http";
-  const url = `${protocol}://${ctx.req.headers.host}/api/land`;
-  return { props: { data: (await axios.get(url)).data } };
-};
-
 export default Map;
