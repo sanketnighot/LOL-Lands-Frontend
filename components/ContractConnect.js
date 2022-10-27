@@ -221,13 +221,19 @@ const ContractConnect = (props) => {
           borderRadius: "20px",
           marginBottom: "10px"
         }}
-        disabled={!connector.ready}
         key={connector.id}
-        onClick={() => connect({ connector })}
+        onClick={() => {
+            if (connector.ready) {
+              connect({ connector })
+            } else {
+              alert("To connect using metamask \n 1. Open this website in metamask mobile app \n 2. Click Wallet Connect below and select Metamask")
+            }
+          }
+        }
       >
         <Typography variant="button" color="darkblue">
         {connector.name}
-          {!connector.ready && ' (unsupported)'}
+          {!connector.ready && ' (Open in Metamask Browser or click Wallet Connect below)'}
           {isLoading &&
             connector.id === pendingConnector?.id &&
             ' (connecting)'}
