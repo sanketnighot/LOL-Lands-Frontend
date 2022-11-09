@@ -140,7 +140,7 @@ const ContractConnect = (props) => {
             category:land_type,
             url:`ipfs://QmVg3BqbPGMDXLGKhgPZK3hdLzVeHJxksRiXmmzTGuV6hF/${infos.name}.json`
           } 
-          let proof = await axios.post('https://merkleproof-cbc6g.ondigitalocean.app/api/getMerkleProof', proofData)
+          let proof = await axios.post('https://lolmapapi-5o64b.ondigitalocean.app/map/getMerkleProof', proofData)
           // console.log("Proof: ", proof.data)
           const price = Web3.utils.toWei((infos.price).toString(), 'ether')
           console.log("Connected Wallet: ", address)
