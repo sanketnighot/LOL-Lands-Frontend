@@ -14,7 +14,7 @@ const Map = ({ data }) => {
 
   const fetchMap = async () => {
     try {
-        const response = await axios.get("https://lolmapapi-5o64b.ondigitalocean.app/map/getMap").catch((err) => {
+        const response = await axios.get("https://map-api-shha8.ondigitalocean.app/map/getMap").catch((err) => {
         console.log(err);
           });
           setLands(response.data);

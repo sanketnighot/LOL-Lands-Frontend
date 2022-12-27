@@ -93,7 +93,7 @@ const ContractConnect = (props) => {
     const infos = props.data;
     // setDispMsg("Checking Status");
     const tileUpdate = await axios.get(
-      `https://lolmapapi-5o64b.ondigitalocean.app/map/getTile?x=${infos.x}&y=${infos.y}`
+      `https://map-api-shha8.ondigitalocean.app/map/getTile?x=${infos.x}&y=${infos.y}`
     );
     if (tileUpdate.data.status === "MINTED") {
       return alert("This Land is already MINTED !");
@@ -140,8 +140,8 @@ const ContractConnect = (props) => {
             category:land_type,
             url:`ipfs://QmVg3BqbPGMDXLGKhgPZK3hdLzVeHJxksRiXmmzTGuV6hF/${infos.name}.json`
           } 
-          let proof = await axios.post('https://lolmapapi-5o64b.ondigitalocean.app/map/getMerkleProof', proofData)
-          // console.log("Proof: ", proof.data)
+          let proof = await axios.post('https://map-api-shha8.ondigitalocean.app/map/getMerkleProof', proofData)
+          console.log("Proof: ", proof.data)
           const price = Web3.utils.toWei((infos.price).toString(), 'ether')
           console.log("Connected Wallet: ", address)
           let nftTxn = await contract.buyLand(address, proof.data, x, y, land_type, proofData.url,{value: price}).catch((err)=>{
@@ -164,20 +164,20 @@ const ContractConnect = (props) => {
           );
           tileData.status = "BOOKED"
           await axios.post(
-                "https://lolmapapi-5o64b.ondigitalocean.app/map/updateTile",
+                "https://map-api-shha8.ondigitalocean.app/map/updateTile",
                 {x: infos.x, y:infos.y, update: tileData}
               );
           await nftTxn.wait(1).then(()=>{
                 console.log(nftTxn);
                 tileData.status = "MINTED" 
                 axios.post(
-                    "https://lolmapapi-5o64b.ondigitalocean.app/map/updateTile",
+                    "https://map-api-shha8.ondigitalocean.app/map/updateTile",
                     {x: infos.x, y:infos.y, update: tileData}
                   );
               }).catch((err) => {
                 tileData.status = "FOR_SALE"
                 axios.post(
-                  "https://lolmapapi-5o64b.ondigitalocean.app/map/updateTile",
+                  "https://map-api-shha8.ondigitalocean.app/map/updateTile",
                   {x: infos.x, y:infos.y, update: tileData}
                 );
                 console.log(err)
@@ -188,7 +188,7 @@ const ContractConnect = (props) => {
           } else {
             tileData.status = "FOR_SALE"
             axios.post(
-              "https://lolmapapi-5o64b.ondigitalocean.app/map/updateTile",
+              "https://map-api-shha8.ondigitalocean.app/map/updateTile",
               {x: infos.x, y:infos.y, update: tileData}
             );
             alert("Incorrect Network \nSwitch to Ethereum Mainnet")
@@ -200,7 +200,7 @@ const ContractConnect = (props) => {
         let tileData = tileUpdate.data
         tileData.status = "FOR_SALE"
          axios.post(
-            "https://lolmapapi-5o64b.ondigitalocean.app/map/updateTile",
+            "https://map-api-shha8.ondigitalocean.app/map/updateTile",
             {x: infos.x, y:infos.y, update: tileData}
           );
           console.log(e);
